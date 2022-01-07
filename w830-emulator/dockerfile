@@ -1,0 +1,21 @@
+FROM node:14-alpine AS builder
+WORKDIR /tmp/builder
+
+COPY . .
+RUN npm i -g typescript
+RUN tsc 
+
+# ---- #
+
+FROM node:14-alpine
+WORKDIR /usr/src/app
+
+ARG POST_FREQUENCY
+ARG BACKEND_URL
+
+COPY --from=builder /tmp/builder/dist/ .
+COPY package*.json .
+
+RUN npm ci --only=production
+
+ENTRYPOINT [ "node", "index.js" ]
