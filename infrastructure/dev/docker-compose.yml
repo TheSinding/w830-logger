@@ -1,0 +1,32 @@
+version: '3.4'
+
+services: 
+  mongo:
+    image: mongo:4.4
+    container_name: mongodb
+    ports:
+      - 27017:27017
+      - 27018:27018
+      - 27019:27019
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: metrics
+  prometheus_w830_dev:
+    image: prom/prometheus
+    container_name: prometheus_w830_dev
+    volumes:
+      - ./prometheus.config.yml:/etc/prometheus/prometheus.yml
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    ports:
+      - 9090:9090
+  w830_emulator:
+    container_name: w830_emulator
+    build: 
+      context: "../../w830-emulator"
+      dockerfile: "dockerfile"
+    environment:
+      POST_FREQUENCY: 3000
+      BACKEND_URL: http://host.docker.internal:9000
