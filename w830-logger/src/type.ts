@@ -32,7 +32,7 @@ export const RawMetricSnapshotSchema = Type.Object(
 );
 
 export interface WeatherMetricSnapshot {
-  dateUTC: Date;
+  timestamp: number;
   tempInC: number;
   humidityIn: number;
   baromRelIn: number;

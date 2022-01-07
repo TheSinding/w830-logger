@@ -1,7 +1,8 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { WeatherMetricsDatastore } from "../connectors/metrics";
 import { RawMetricResponse, RawMetricSnapshotSchema, WeatherMetricSnapshot } from "../type";
-import { parseSnapshot } from "../utils";
+import { parseSnapshot } from "../utils/parseSnapshot";
+import { prometheusWeatherMetricExporter } from "../utils/prometheusExporter";
 
 const cache = new Set<WeatherMetricSnapshot>();
 type NewMetricRequest = FastifyRequest<{
@@ -32,8 +33,12 @@ export async function RoutePlugin(fastify: FastifyInstance) {
 
   fastify.get("/data/scrape", {}, async (request, reply) => {
     fastify.log.info("Sending metrics to scraper");
-    const metrics = Array.from(cache.entries());
+
+    const metrics: WeatherMetricSnapshot[] = Array.from(cache);
+
+    const lines = prometheusWeatherMetricExporter(metrics);
+
     cache.clear();
-    reply.send(metrics);
+    reply.send(lines.join("\n"));
   });
 }

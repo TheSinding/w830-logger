@@ -1,4 +1,4 @@
-import { WeatherMetricSnapshot, RawMetricResponse } from "./type";
+import { WeatherMetricSnapshot, RawMetricResponse } from "../type";
 
 const MPH_MS_CONST = 0.44704;
 const convertFtoC = (f: number) => (5 / 9) * (f - 32);
@@ -6,7 +6,7 @@ const convertMphToMs = (mph: number) => mph * MPH_MS_CONST;
 
 export function parseSnapshot(rawSnapshot: RawMetricResponse): WeatherMetricSnapshot {
   return {
-    dateUTC: new Date(rawSnapshot.dateutc),
+    timestamp: new Date(rawSnapshot.dateutc).getTime(),
     tempC: convertFtoC(Number(rawSnapshot.tempf)),
     tempInC: convertFtoC(Number(rawSnapshot.tempinf)),
     baromAbsIn: Number(rawSnapshot.baromabsin),
