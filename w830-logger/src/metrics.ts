@@ -61,11 +61,11 @@ const solarRadiationGauge = new Gauge({
 
 
 export const addSnapshot = (snapshot: WeatherMetricSnapshot) => {
-	temperatureGauge.set({ location: "inside_weather_station", unit: "c" }, snapshot.tempInC)
-	temperatureGauge.set({ location: "outside_weather_station", unit: "c" }, snapshot.tempC)
+	temperatureGauge.set({ location: "inside", unit: "c" }, snapshot.tempInC)
+	temperatureGauge.set({ location: "outside", unit: "c" }, snapshot.tempC)
 
-	humidityGauge.set({ location: "outside_weather_station" }, snapshot.humidity)
-	humidityGauge.set({ location: "inside_weather_station" }, snapshot.humidityIn)
+	humidityGauge.set({ location: "outside" }, snapshot.humidity)
+	humidityGauge.set({ location: "inside" }, snapshot.humidityIn)
 
 	barometerGauge.set({ type: "absolute", location: "inside" }, snapshot.baromAbsIn)
 	barometerGauge.set({ type: "relative", location: "inside" }, snapshot.baromRelIn)
