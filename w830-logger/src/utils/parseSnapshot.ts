@@ -4,7 +4,7 @@ const FIXED_LENGTH = 2
 const MPH_MS_CONST = 0.44704;
 const convertToNumber = (n: string | number, fixed?: number) => Number(Number(n).toFixed(fixed !== undefined ? fixed : FIXED_LENGTH))
 const convertFtoC = (f: number): number => convertToNumber(((5 / 9) * (f - 32)));
-const convertMphToMs = (mph: number) => convertToNumber(mph * MPH_MS_CONST, 0);
+const convertMphToMs = (mph: number) => convertToNumber(mph * MPH_MS_CONST);
 
 
 export function parseSnapshot(rawSnapshot: RawMetricResponse): WeatherMetricSnapshot {
