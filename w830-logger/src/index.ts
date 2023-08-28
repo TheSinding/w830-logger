@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 import Fastify from "fastify";
-import formBody from "fastify-formbody";
+import formBody from "@fastify/formbody";
 import { RoutePlugin as ReportRoute } from "./report";
 import { plugin as MetricsPlugin } from "./metrics";
 
@@ -11,4 +11,4 @@ fastify.register(formBody);
 fastify.register(ReportRoute);
 fastify.register(MetricsPlugin);
 
-fastify.listen(9000, "0.0.0.0").then((_) => { });
+fastify.listen({ port: 9000, host: "0.0.0.0" }).then((_) => {});

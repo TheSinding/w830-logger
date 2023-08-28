@@ -1,10 +1,12 @@
 import { MongoClient } from "mongodb";
 
-if (!process.env.MONGODB_URI) {
-  console.error("No mongodb URI");
-  process.exit(1);
+let useMongo = !!process.env.MONGODB_URI;
+
+if (!useMongo) {
+  console.error("No mongodb URI - MongoDB wont be enabled");
 }
-export const WeatherMetricsDatastore = async () => {
+
+export const WeatherMetricsDataStore = async () => {
   const client = new MongoClient(process.env.MONGODB_URI as string);
   await client.connect();
   const database = client.db("metrics");

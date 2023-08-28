@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { WeatherMetricsDatastore } from "../connectors/metrics";
+import { WeatherMetricsDataStore } from "../connectors/metrics";
 import { addSnapshot } from "../metrics";
 import { RawMetricResponse, RawMetricSnapshotSchema, WeatherMetricSnapshot } from "../type";
 import { parseSnapshot } from "../utils/parseSnapshot";
@@ -16,15 +16,20 @@ export async function RoutePlugin(fastify: FastifyInstance) {
       },
     },
     async (request: NewMetricRequest, reply: FastifyReply) => {
+      console.log(request.body);
+
       const snapshot = parseSnapshot(request.body);
       fastify.log.info(`Creating metric - "${JSON.stringify(snapshot)}"`);
 
-      addSnapshot(snapshot)
+      addSnapshot(snapshot);
 
-      const { client, collection } = await WeatherMetricsDatastore();
-
-      await collection.insertOne(snapshot);
-      await client.close();
+      try {
+        const { client, collection } = await WeatherMetricsDataStore();
+        await collection.insertOne(snapshot);
+        await client.close();
+      } catch (error) {
+        fastify.log.error("Could not open MongoDB conenction, skipping");
+      }
 
       return reply.status(201).send();
     }

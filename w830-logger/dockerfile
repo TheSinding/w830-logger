@@ -1,22 +1,20 @@
-FROM node:16-alpine AS builder
+FROM node:20-alpine AS builder
 WORKDIR /tmp/builder
-
-COPY . .
 
 RUN npm i -g typescript
 RUN tsc 
 
 # ---- #
 
-FROM node:16-alpine
+FROM node:20-alpine
 WORKDIR /usr/src/app
 
 ARG MONGODB_URI
 ARG MONGODB_PORT
 
-COPY /tmp/builder/dist/ .
+COPY ./dist/ .
 COPY package*.json .
 
-RUN npm ci --only=production
+RUN npm i --omit=dev
 
 ENTRYPOINT [ "node", "index.js" ]
