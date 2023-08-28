@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: w830-logger
-          image: registry.sinding.net/w830-logger:1.1.4
+          image: registry.sinding.net/w830-logger:1.1.5
           ports:
             - name: api
               containerPort: 9000
@@ -27,6 +27,7 @@ kind: Service
 metadata:
   name: w830-logger-svc
 spec:
+  type: LoadBalancer
   selector:
     app: w830-logger
   ports:
